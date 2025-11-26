@@ -1,0 +1,6 @@
+rootProject.name = 'rpc-java-toolkit'
+
+include 'rpc-core'
+include 'rpc-server'
+include 'rpc-client'
+include 'rpc-android'
