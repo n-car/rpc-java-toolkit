@@ -39,12 +39,15 @@ open class RpcViewModel(
     private val config: com.carpanese.rpc.client.RpcClientConfig = com.carpanese.rpc.client.RpcClientConfig()
 ) : ViewModel() {
     
-    private val client = RpcClientKt(url, config)
+    @PublishedApi
+    internal val client = RpcClientKt(url, config)
     
-    private val _loading = MutableLiveData<Boolean>(false)
+    @PublishedApi
+    internal val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> = _loading
     
-    private val _error = MutableLiveData<RpcException?>(null)
+    @PublishedApi
+    internal val _error = MutableLiveData<RpcException?>(null)
     val error: LiveData<RpcException?> = _error
     
     /**

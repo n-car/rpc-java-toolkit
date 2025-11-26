@@ -1,15 +1,12 @@
 plugins {
-    id 'java-library'
-    id 'maven-publish'
+    id 'com.android.library' version '8.7.3' apply false
+    id 'org.jetbrains.kotlin.android' version '2.1.0' apply false
 }
 
 group = 'com.carpanese.rpc'
 version = '1.0.0'
 
 subprojects {
-    apply plugin: 'java-library'
-    apply plugin: 'maven-publish'
-    
     group = rootProject.group
     version = rootProject.version
     
@@ -18,49 +15,55 @@ subprojects {
         google()
     }
     
-    java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    
-    dependencies {
-        testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
-        testImplementation 'org.mockito:mockito-core:5.5.0'
-    }
-    
-    test {
-        useJUnitPlatform()
-    }
-    
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-                
-                pom {
-                    name = project.name
-                    description = "JSON-RPC 2.0 toolkit for Java - ${project.name}"
-                    url = 'https://github.com/n-car/rpc-java-toolkit'
+    // Java modules only
+    if (project.name != 'rpc-android') {
+        plugins.apply('java-library')
+        plugins.apply('maven-publish')
+        
+        java {
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
+        }
+        
+        dependencies {
+            testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+            testImplementation 'org.mockito:mockito-core:5.5.0'
+        }
+        
+        test {
+            useJUnitPlatform()
+        }
+        
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from components.java
                     
-                    licenses {
-                        license {
-                            name = 'MIT License'
-                            url = 'https://opensource.org/licenses/MIT'
-                        }
-                    }
-                    
-                    developers {
-                        developer {
-                            id = 'n-car'
-                            name = 'Nicola Carpanese'
-                            email = 'nicola@carpanese.com'
-                        }
-                    }
-                    
-                    scm {
-                        connection = 'scm:git:git://github.com/n-car/rpc-java-toolkit.git'
-                        developerConnection = 'scm:git:ssh://github.com/n-car/rpc-java-toolkit.git'
+                    pom {
+                        name = project.name
+                        description = "JSON-RPC 2.0 toolkit for Java - ${project.name}"
                         url = 'https://github.com/n-car/rpc-java-toolkit'
+                        
+                        licenses {
+                            license {
+                                name = 'MIT License'
+                                url = 'https://opensource.org/licenses/MIT'
+                            }
+                        }
+                        
+                        developers {
+                            developer {
+                                id = 'n-car'
+                                name = 'Nicola Carpanese'
+                                email = 'nicola@carpanese.com'
+                            }
+                        }
+                        
+                        scm {
+                            connection = 'scm:git:git://github.com/n-car/rpc-java-toolkit.git'
+                            developerConnection = 'scm:git:ssh://github.com/n-car/rpc-java-toolkit.git'
+                            url = 'https://github.com/n-car/rpc-java-toolkit'
+                        }
                     }
                 }
             }

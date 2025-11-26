@@ -6,7 +6,6 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
@@ -79,7 +78,7 @@ public class RpcClient implements AutoCloseable {
      * @throws RpcException If the call fails or returns an error
      * @throws IOException If a network error occurs
      */
-    public JsonElement call(String method, @Nullable JsonElement params) throws RpcException, IOException {
+    public JsonElement call(String method, JsonElement params) throws RpcException, IOException {
         return call(method, params, System.currentTimeMillis());
     }
     
@@ -93,7 +92,7 @@ public class RpcClient implements AutoCloseable {
      * @throws RpcException If the call fails or returns an error
      * @throws IOException If a network error occurs
      */
-    public JsonElement call(String method, @Nullable JsonElement params, Object id) 
+    public JsonElement call(String method, JsonElement params, Object id) 
             throws RpcException, IOException {
         
         RpcRequest request = new RpcRequest(method, params, id);
@@ -113,7 +112,7 @@ public class RpcClient implements AutoCloseable {
      * @param params Method parameters
      * @throws IOException If a network error occurs
      */
-    public void notify(String method, @Nullable JsonElement params) throws IOException {
+    public void notify(String method, JsonElement params) throws IOException {
         RpcRequest request = RpcRequest.notification(method, params);
         
         String requestJson = serializer.toJson(request);

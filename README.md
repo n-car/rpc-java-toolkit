@@ -29,12 +29,37 @@ Core types and serialization for JSON-RPC 2.0.
 implementation 'com.carpanese.rpc:rpc-core:1.0.0'
 ```
 
+### rpc-server ⭐ NEW
+Server-side JSON-RPC 2.0 endpoint for Java applications.
+- Method registration with handlers
+- Introspection methods (`__rpc.*`)
+- Batch request support
+- Middleware system
+- Structured logging (Text/JSON)
+- Thread-safe concurrent handling
+- Schema and metadata support
+- Compatible with Servlet, Spring Boot, Vert.x
+
+**Maven:**
+```xml
+<dependency>
+    <groupId>com.carpanese.rpc</groupId>
+    <artifactId>rpc-server</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+**Gradle:**
+```gradle
+implementation 'com.carpanese.rpc:rpc-server:1.0.0'
+```
+
 ### rpc-client
 HTTP client for making RPC calls (OkHttp-based).
 - Thread-safe client
 - Timeout configuration
 - Authentication support
-- Compatible with Express, PHP, .NET, Arduino servers
+- Compatible with Express, PHP, .NET, Arduino, Java servers
 
 **Maven:**
 ```xml

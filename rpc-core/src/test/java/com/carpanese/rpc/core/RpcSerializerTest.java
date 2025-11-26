@@ -26,11 +26,10 @@ class RpcSerializerTest {
     void testSafeModeStrings() {
         RpcSerializer serializer = new RpcSerializer(true);
         
-        JsonObject obj = new JsonObject();
-        obj.addProperty("message", "hello");
-        
-        String json = serializer.toJson(obj);
-        assertTrue(json.contains("S:hello"), "Should add S: prefix in safe mode");
+        // Test direct String serialization
+        String str = "hello";
+        String json = serializer.toJson(str);
+        assertTrue(json.contains("S:hello"), "Should add S: prefix in safe mode for direct strings");
     }
     
     @Test

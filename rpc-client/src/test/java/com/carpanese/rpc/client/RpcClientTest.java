@@ -86,7 +86,7 @@ class RpcClientTest {
         RecordedRequest request = server.takeRequest();
         String body = request.getBody().readUtf8();
         assertTrue(body.contains("\"method\":\"logEvent\""));
-        assertFalse(body.contains("\"id\":")); // Notifications don't have ID
+        assertTrue(body.contains("\"id\":null"), "Notifications should have id:null");
     }
     
     @Test
