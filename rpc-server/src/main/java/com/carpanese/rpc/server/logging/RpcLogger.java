@@ -17,7 +17,7 @@ public class RpcLogger {
     private final RpcLoggerOptions options;
     private final PrintStream output;
     private final Gson gson;
-    private static final DateTimeFormatter TIME_FORMATTER = 
+    private static final DateTimeFormatter TIME_FORMATTER =
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").withZone(ZoneId.systemDefault());
 
     public RpcLogger(RpcLoggerOptions options) {
@@ -97,8 +97,8 @@ public class RpcLogger {
             return;
         }
 
-        String timestamp = options.isIncludeTimestamp() 
-            ? TIME_FORMATTER.format(Instant.now()) 
+        String timestamp = options.isIncludeTimestamp()
+            ? TIME_FORMATTER.format(Instant.now())
             : null;
 
         if (options.getFormat() == RpcLogFormat.JSON) {
@@ -110,18 +110,18 @@ public class RpcLogger {
 
     private void logJson(RpcLogLevel level, String message, Object metadata, Throwable error, String timestamp) {
         Map<String, Object> logEntry = new HashMap<>();
-        
+
         if (timestamp != null) {
             logEntry.put("timestamp", timestamp);
         }
-        
+
         logEntry.put("level", level.name());
         logEntry.put("message", message);
-        
+
         if (metadata != null) {
             logEntry.put("metadata", metadata);
         }
-        
+
         if (error != null) {
             Map<String, Object> errorInfo = new HashMap<>();
             errorInfo.put("message", error.getMessage());
@@ -134,20 +134,20 @@ public class RpcLogger {
 
     private void logText(RpcLogLevel level, String message, Object metadata, Throwable error, String timestamp) {
         StringBuilder sb = new StringBuilder();
-        
+
         if (timestamp != null) {
             sb.append("[").append(timestamp).append("] ");
         }
-        
+
         sb.append("[").append(level.name()).append("] ");
         sb.append(message);
-        
+
         if (metadata != null) {
             sb.append(" | ").append(gson.toJson(metadata));
         }
-        
+
         output.println(sb.toString());
-        
+
         if (error != null) {
             error.printStackTrace(output);
         }

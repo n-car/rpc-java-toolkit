@@ -14,7 +14,7 @@ public class MiddlewareManager {
 
     /**
      * Add middleware to the pipeline
-     * 
+     *
      * @param middleware The middleware to add
      * @param phase "before" or "after"
      */

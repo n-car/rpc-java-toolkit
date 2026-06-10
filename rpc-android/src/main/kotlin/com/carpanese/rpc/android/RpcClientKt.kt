@@ -9,13 +9,13 @@ import kotlinx.coroutines.withContext
 
 /**
  * Kotlin Coroutines wrapper for RpcClient
- * 
+ *
  * Provides suspend functions for making RPC calls in Android apps.
- * 
+ *
  * Example usage:
  * ```kotlin
  * val client = RpcClientKt("http://api.example.com/rpc")
- * 
+ *
  * lifecycleScope.launch {
  *     try {
  *         val result = client.call("myMethod", params)
@@ -30,12 +30,12 @@ class RpcClientKt(
     url: String,
     config: RpcClientConfig = RpcClientConfig()
 ) : AutoCloseable {
-    
+
     private val client = RpcClient(url, config)
-    
+
     /**
      * Call a remote method (suspend function)
-     * 
+     *
      * @param method Method name
      * @param params Method parameters (can be null)
      * @return Result as JsonElement
@@ -44,47 +44,47 @@ class RpcClientKt(
     suspend fun call(method: String, params: JsonElement? = null): JsonElement = withContext(Dispatchers.IO) {
         client.call(method, params)
     }
-    
+
     /**
      * Call a remote method with custom request ID
      */
     suspend fun call(method: String, params: JsonElement?, id: Any): JsonElement = withContext(Dispatchers.IO) {
         client.call(method, params, id)
     }
-    
+
     /**
      * Send a notification (no response expected)
      */
     suspend fun notify(method: String, params: JsonElement? = null) = withContext(Dispatchers.IO) {
         client.notify(method, params)
     }
-    
+
     /**
      * Set authentication token
      */
     fun setAuthToken(token: String) {
         client.setAuthToken(token)
     }
-    
+
     /**
      * Clear authentication token
      */
     fun clearAuth() {
         client.clearAuth()
     }
-    
+
     /**
      * Get the server URL
      */
     val url: String
         get() = client.url
-    
+
     /**
      * Check if safe mode is enabled
      */
     val safeMode: Boolean
         get() = client.isSafeMode
-    
+
     override fun close() {
         client.close()
     }
@@ -92,7 +92,7 @@ class RpcClientKt(
 
 /**
  * Extension function to call RPC methods with type-safe result
- * 
+ *
  * Example:
  * ```kotlin
  * data class User(val name: String, val email: String)

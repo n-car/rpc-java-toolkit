@@ -22,7 +22,7 @@ public class MethodConfig {
     }
 
     // Getters and Setters
-    
+
     public String getName() {
         return name;
     }
@@ -69,7 +69,7 @@ public class MethodConfig {
     }
 
     // Fluent builder methods
-    
+
     public MethodConfig withSchema(JsonElement schema) {
         this.schema = schema;
         return this;

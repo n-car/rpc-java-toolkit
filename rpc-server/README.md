@@ -113,7 +113,7 @@ middleware.add(new IRpcMiddleware() {
     public void beforeAsync(RpcRequest request, Object context) {
         System.out.println("Before: " + request.getMethod());
     }
-    
+
     @Override
     public void afterAsync(RpcRequest request, Object result, Object context) {
         System.out.println("After: " + request.getMethod());
@@ -138,14 +138,14 @@ endpoint.addMethod("divide", (params, ctx) -> {
     var p = params.getAsJsonObject();
     int a = p.get("a").getAsInt();
     int b = p.get("b").getAsInt();
-    
+
     if (b == 0) {
         throw new RpcException(
             RpcError.INVALID_PARAMS,
             "Division by zero"
         );
     }
-    
+
     return new JsonPrimitive(a / b);
 });
 ```
@@ -170,17 +170,17 @@ String response = endpoint.handleRequest(batch);
 @WebServlet("/rpc")
 public class RpcServlet extends HttpServlet {
     private final RpcEndpoint endpoint = new RpcEndpoint();
-    
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         // Read request body
         String requestBody = req.getReader().lines()
             .collect(Collectors.joining());
-        
+
         // Handle RPC request
         String response = endpoint.handleRequest(requestBody);
-        
+
         // Send response
         resp.setContentType("application/json");
         resp.getWriter().write(response);
@@ -194,19 +194,19 @@ public class RpcServlet extends HttpServlet {
 @RestController
 public class RpcController {
     private final RpcEndpoint endpoint;
-    
+
     public RpcController() {
         this.endpoint = new RpcEndpoint();
         registerMethods();
     }
-    
+
     @PostMapping("/rpc")
     public String handleRpc(@RequestBody String request) {
         return endpoint.handleRequest(request);
     }
-    
+
     private void registerMethods() {
-        endpoint.addMethod("ping", (params, ctx) -> 
+        endpoint.addMethod("ping", (params, ctx) ->
             new JsonPrimitive("pong"));
     }
 }

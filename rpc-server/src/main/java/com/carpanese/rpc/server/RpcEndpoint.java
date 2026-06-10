@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * JSON-RPC 2.0 Server Endpoint
- * 
+ *
  * Main class for handling JSON-RPC requests and managing method registration.
  * Thread-safe for concurrent requests.
  */
@@ -21,6 +21,7 @@ public class RpcEndpoint {
     private final MiddlewareManager middleware;
     private final Object context;
     private final Gson gson;
+    private final RpcSerializer serializer;
     private final String introspectionPrefix;
     private boolean isInternalRegistration = false;
 
@@ -33,7 +34,7 @@ public class RpcEndpoint {
 
     /**
      * Create a new RPC endpoint with context
-     * 
+     *
      * @param context Server context object passed to handlers
      */
     public RpcEndpoint(Object context) {
@@ -42,7 +43,7 @@ public class RpcEndpoint {
 
     /**
      * Create a new RPC endpoint with context and options
-     * 
+     *
      * @param context Server context object
      * @param options Configuration options
      */
@@ -50,7 +51,7 @@ public class RpcEndpoint {
         this.context = context;
         this.options = options != null ? options : new RpcOptions();
         this.introspectionPrefix = this.options.getIntrospectionPrefix();
-        
+
         // Initialize logger
         if (this.options.isEnableLogging()) {
             this.logger = new RpcLogger(this.options.getLoggerOptions());
@@ -66,8 +67,9 @@ public class RpcEndpoint {
             this.middleware = null;
         }
 
-        // Initialize Gson - Safe mode is handled by RpcSerializer
+        // Initialize serializers
         this.gson = new GsonBuilder().create();
+        this.serializer = new RpcSerializer(this.options.isSafeEnabled());
 
         // Register introspection methods if enabled
         if (this.options.isEnableIntrospection()) {
@@ -77,7 +79,7 @@ public class RpcEndpoint {
 
     /**
      * Register an RPC method
-     * 
+     *
      * @param name Method name
      * @param handler Method handler function
      * @return this for method chaining
@@ -88,7 +90,7 @@ public class RpcEndpoint {
 
     /**
      * Register an RPC method with configuration
-     * 
+     *
      * @param name Method name
      * @param handler Method handler function
      * @param config Method configuration (schema, exposeSchema, description)
@@ -125,13 +127,13 @@ public class RpcEndpoint {
 
     /**
      * Remove a registered method
-     * 
+     *
      * @param name Method name
      * @return this for method chaining
      */
     public RpcEndpoint removeMethod(String name) {
         methods.remove(name);
-        
+
         if (logger != null) {
             logger.debug("Method removed: " + name);
         }
@@ -141,7 +143,7 @@ public class RpcEndpoint {
 
     /**
      * Get all registered method names
-     * 
+     *
      * @return Array of method names
      */
     public String[] listMethods() {
@@ -150,7 +152,7 @@ public class RpcEndpoint {
 
     /**
      * Get method configuration
-     * 
+     *
      * @param name Method name
      * @return Method configuration or null if not found
      */
@@ -160,7 +162,7 @@ public class RpcEndpoint {
 
     /**
      * Get middleware manager
-     * 
+     *
      * @return Middleware manager or null if disabled
      */
     public MiddlewareManager getMiddleware() {
@@ -169,7 +171,7 @@ public class RpcEndpoint {
 
     /**
      * Get logger instance
-     * 
+     *
      * @return Logger or null if disabled
      */
     public RpcLogger getLogger() {
@@ -178,7 +180,7 @@ public class RpcEndpoint {
 
     /**
      * Handle a JSON-RPC request
-     * 
+     *
      * @param jsonRequest JSON-RPC request as string
      * @return JSON-RPC response as string
      */
@@ -186,40 +188,40 @@ public class RpcEndpoint {
         try {
             // Detect batch vs single request
             JsonElement element = JsonParser.parseString(jsonRequest);
-            
+
             if (element.isJsonArray()) {
                 if (!options.isEnableBatch()) {
-                    RpcResponse error = createErrorResponse(null, 
+                    RpcResponse error = createErrorResponse(null,
                         new RpcException(RpcError.INVALID_REQUEST, "Batch requests are not enabled"));
-                    return gson.toJson(error);
+                    return serializeResponse(error);
                 }
 
                 JsonArray requests = element.getAsJsonArray();
-                
+
                 if (requests.size() == 0) {
                     RpcResponse error = createErrorResponse(null,
                         new RpcException(RpcError.INVALID_REQUEST, "Invalid batch request"));
-                    return gson.toJson(error);
+                    return serializeResponse(error);
                 }
 
                 if (options.getMaxBatchSize() > 0 && requests.size() > options.getMaxBatchSize()) {
                     RpcResponse error = createErrorResponse(null,
-                        new RpcException(RpcError.INVALID_REQUEST, 
+                        new RpcException(RpcError.INVALID_REQUEST,
                             "Batch size exceeds maximum of " + options.getMaxBatchSize()));
-                    return gson.toJson(error);
+                    return serializeResponse(error);
                 }
 
                 return handleBatchRequest(requests);
             } else {
-                RpcRequest request = gson.fromJson(element, RpcRequest.class);
+                RpcRequest request = parseRequest(element);
                 RpcResponse response = handleSingleRequest(request);
-                
+
                 // Notifications return no response
                 if (request.getId() == null) {
                     return "";
                 }
 
-                return gson.toJson(response);
+                return serializeResponse(response);
             }
         } catch (JsonSyntaxException e) {
             if (logger != null) {
@@ -227,14 +229,14 @@ public class RpcEndpoint {
             }
             RpcResponse error = createErrorResponse(null,
                 new RpcException(RpcError.PARSE_ERROR, "Invalid JSON", e));
-            return gson.toJson(error);
+            return serializeResponse(error);
         } catch (Exception e) {
             if (logger != null) {
                 logger.error("Unexpected error", null, e);
             }
             RpcResponse error = createErrorResponse(null,
                 new RpcException(RpcError.INTERNAL_ERROR, "Internal error", e));
-            return gson.toJson(error);
+            return serializeResponse(error);
         }
     }
 
@@ -254,7 +256,7 @@ public class RpcEndpoint {
             // Find method
             MethodConfig methodConfig = methods.get(request.getMethod());
             if (methodConfig == null) {
-                throw new RpcException(RpcError.METHOD_NOT_FOUND, 
+                throw new RpcException(RpcError.METHOD_NOT_FOUND,
                     "Method not found: " + request.getMethod());
             }
 
@@ -282,7 +284,7 @@ public class RpcEndpoint {
             if (logger != null) {
                 logger.error("Internal error processing request", null, e);
             }
-            
+
             String message = options.isSanitizeErrors() ? "Internal error" : e.getMessage();
             RpcError error = new RpcError(RpcError.INTERNAL_ERROR, message);
             return new RpcResponse(error, request.getId());
@@ -301,12 +303,12 @@ public class RpcEndpoint {
 
         for (JsonElement element : requests) {
             try {
-                RpcRequest request = gson.fromJson(element, RpcRequest.class);
+                RpcRequest request = parseRequest(element);
                 RpcResponse response = handleSingleRequest(request);
-                
+
                 // Don't include notification responses
                 if (request.getId() != null) {
-                    responses.add(gson.toJsonTree(response));
+                    responses.add(responseToJsonTree(response));
                 }
             } catch (Exception e) {
                 if (logger != null) {
@@ -314,11 +316,35 @@ public class RpcEndpoint {
                 }
                 RpcResponse error = createErrorResponse(null,
                     new RpcException(RpcError.INVALID_REQUEST, "Invalid request in batch"));
-                responses.add(gson.toJsonTree(error));
+                responses.add(responseToJsonTree(error));
             }
         }
 
+        if (responses.size() == 0) {
+            return "";
+        }
+
         return gson.toJson(responses);
+    }
+
+    private RpcRequest parseRequest(JsonElement element) {
+        if (options.isSafeEnabled()) {
+            return serializer.fromJson(element.toString(), RpcRequest.class);
+        }
+
+        return gson.fromJson(element, RpcRequest.class);
+    }
+
+    private String serializeResponse(RpcResponse response) {
+        if (options.isSafeEnabled()) {
+            return serializer.toJson(response);
+        }
+
+        return gson.toJson(response);
+    }
+
+    private JsonElement responseToJsonTree(RpcResponse response) {
+        return JsonParser.parseString(serializeResponse(response));
     }
 
     /**
@@ -326,7 +352,7 @@ public class RpcEndpoint {
      */
     private void validateRequest(RpcRequest request) throws RpcException {
         if (!"2.0".equals(request.getJsonrpc())) {
-            throw new RpcException(RpcError.INVALID_REQUEST, 
+            throw new RpcException(RpcError.INVALID_REQUEST,
                 "Invalid JSON-RPC version. Must be '2.0'");
         }
 
@@ -374,7 +400,7 @@ public class RpcEndpoint {
 
             String methodName = paramsObj.get("method").getAsString();
             MethodConfig config = methods.get(methodName);
-            
+
             if (config == null) {
                 throw new RpcException(RpcError.METHOD_NOT_FOUND, "Method not found: " + methodName);
             }
@@ -391,18 +417,18 @@ public class RpcEndpoint {
         // __rpc.describeAll - Get all methods with public schemas
         addMethod(introspectionPrefix + ".describeAll", (params, ctx) -> {
             JsonArray result = new JsonArray();
-            
+
             for (MethodConfig config : methods.values()) {
                 if (!config.getName().startsWith(introspectionPrefix + ".") && config.isExposeSchema()) {
                     JsonObject methodInfo = new JsonObject();
                     methodInfo.addProperty("name", config.getName());
                     methodInfo.add("schema", config.getSchema());
-                    methodInfo.addProperty("description", 
+                    methodInfo.addProperty("description",
                         config.getDescription() != null ? config.getDescription() : "");
                     result.add(methodInfo);
                 }
             }
-            
+
             return result;
         }, new MethodConfig()
             .withDescription("List all methods with public schemas")

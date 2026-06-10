@@ -99,16 +99,16 @@ public class Example {
     public static void main(String[] args) throws Exception {
         // Create client
         try (RpcClient client = new RpcClient("http://localhost:3000/rpc")) {
-            
+
             // Simple call
             JsonElement result = client.call("ping", null);
             System.out.println("Result: " + result);
-            
+
             // Call with parameters
             JsonObject params = new JsonObject();
             params.addProperty("name", "John");
             JsonElement user = client.call("getUser", params);
-            
+
             // Notification (no response)
             client.notify("logEvent", params);
         }
@@ -123,9 +123,9 @@ import com.carpanese.rpc.android.RpcClientKt
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    
+
     private val client = RpcClientKt("http://api.example.com/rpc")
-    
+
     fun loadData() {
         lifecycleScope.launch {
             try {
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     override fun onDestroy() {
         super.onDestroy()
         client.close()
@@ -154,15 +154,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class MyViewModel : RpcViewModel("http://api.example.com/rpc") {
-    
+
     private val _data = MutableLiveData<User>()
     val data: LiveData<User> = _data
-    
+
     fun loadUser(userId: Int) {
         val params = JsonObject().apply {
             addProperty("userId", userId)
         }
-        
+
         callRpcAs<User>("getUser", params) { user ->
             _data.value = user
         }
@@ -284,7 +284,7 @@ try {
     // RPC error (method not found, invalid params, etc.)
     int errorCode = e.getErrorCode();
     String errorMessage = e.getMessage();
-    
+
     if (errorCode == RpcError.METHOD_NOT_FOUND) {
         // Handle method not found
     }
@@ -330,15 +330,15 @@ Works seamlessly with:
 ```kotlin
 class WeatherActivity : AppCompatActivity() {
     private val client = RpcClientKt("http://api.weather.com/rpc")
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         lifecycleScope.launch {
             val params = JsonObject().apply {
                 addProperty("city", "Rome")
             }
-            
+
             try {
                 val weather = client.callAs<Weather>("getWeather", params)
                 temperatureText.text = "${weather.temp}°C"
@@ -354,18 +354,18 @@ class WeatherActivity : AppCompatActivity() {
 
 ```kotlin
 class DeviceControlViewModel : RpcViewModel("http://192.168.1.100:8080") {
-    
+
     fun toggleLed(ledId: Int, state: Boolean) {
         val params = JsonObject().apply {
             addProperty("ledId", ledId)
             addProperty("state", state)
         }
-        
+
         callRpc("setLed", params) { result ->
             // LED toggled successfully
         }
     }
-    
+
     fun readSensors() {
         callRpcAs<SensorData>("readSensors") { data ->
             // Update UI with sensor data
@@ -378,12 +378,12 @@ class DeviceControlViewModel : RpcViewModel("http://192.168.1.100:8080") {
 
 ```kotlin
 class DashboardFragment : Fragment() {
-    
+
     private val client = RpcClientKt("http://api.example.com/rpc")
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         // Poll sensor data every 5 seconds
         viewLifecycleOwner.lifecycleScope.launch {
             while (isActive) {

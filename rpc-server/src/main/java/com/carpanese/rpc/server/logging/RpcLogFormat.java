@@ -8,7 +8,7 @@ public enum RpcLogFormat {
      * Human-readable text format
      */
     TEXT,
-    
+
     /**
      * Structured JSON format
      */

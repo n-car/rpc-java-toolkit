@@ -5,7 +5,7 @@ plugins {
 dependencies {
     // JSON processing
     api 'com.google.code.gson:gson:2.10.1'
-    
+
     // Annotations
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }

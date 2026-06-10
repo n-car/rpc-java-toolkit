@@ -10,25 +10,25 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for RPC calls with LiveData support
- * 
+ *
  * Provides reactive state management for RPC operations in Android apps.
- * 
+ *
  * Example usage:
  * ```kotlin
  * class MyViewModel : RpcViewModel("http://api.example.com/rpc") {
- *     
+ *
  *     fun loadData() {
  *         callRpc("getData") { result ->
  *             // Handle result
  *         }
  *     }
  * }
- * 
+ *
  * // In Activity/Fragment
  * viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
  *     // Show/hide progress
  * }
- * 
+ *
  * viewModel.error.observe(viewLifecycleOwner) { error ->
  *     // Show error message
  * }
@@ -38,21 +38,21 @@ open class RpcViewModel(
     private val url: String,
     private val config: com.carpanese.rpc.client.RpcClientConfig = com.carpanese.rpc.client.RpcClientConfig()
 ) : ViewModel() {
-    
+
     @PublishedApi
     internal val client = RpcClientKt(url, config)
-    
+
     @PublishedApi
     internal val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> = _loading
-    
+
     @PublishedApi
     internal val _error = MutableLiveData<RpcException?>(null)
     val error: LiveData<RpcException?> = _error
-    
+
     /**
      * Call an RPC method with automatic loading and error handling
-     * 
+     *
      * @param method Method name
      * @param params Method parameters
      * @param onSuccess Callback for successful result
@@ -65,7 +65,7 @@ open class RpcViewModel(
         viewModelScope.launch {
             _loading.value = true
             _error.value = null
-            
+
             try {
                 val result = client.call(method, params)
                 onSuccess(result)
@@ -82,7 +82,7 @@ open class RpcViewModel(
             }
         }
     }
-    
+
     /**
      * Call an RPC method with type-safe result
      */
@@ -94,7 +94,7 @@ open class RpcViewModel(
         viewModelScope.launch {
             _loading.value = true
             _error.value = null
-            
+
             try {
                 val result = client.callAs<T>(method, params)
                 onSuccess(result)
@@ -111,7 +111,7 @@ open class RpcViewModel(
             }
         }
     }
-    
+
     /**
      * Send a notification
      */
@@ -125,21 +125,21 @@ open class RpcViewModel(
             }
         }
     }
-    
+
     /**
      * Set authentication token
      */
     fun setAuthToken(token: String) {
         client.setAuthToken(token)
     }
-    
+
     /**
      * Clear authentication token
      */
     fun clearAuth() {
         client.clearAuth()
     }
-    
+
     override fun onCleared() {
         super.onCleared()
         client.close()

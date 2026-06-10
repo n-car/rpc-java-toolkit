@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 
 /**
  * Flow-based RPC operations for reactive programming
- * 
+ *
  * Example usage:
  * ```kotlin
  * rpcFlow("http://api.example.com/rpc") {
@@ -73,7 +73,7 @@ fun rpcResultFlow(
     block: suspend RpcClientKt.() -> JsonElement
 ): Flow<RpcResult<JsonElement>> = flow {
     emit(RpcResult.Loading)
-    
+
     val client = RpcClientKt(url, config)
     try {
         val result = client.block()
@@ -102,7 +102,7 @@ inline fun <reified T> rpcResultFlowAs(
     crossinline block: suspend RpcClientKt.() -> JsonElement
 ): Flow<RpcResult<T>> = flow {
     emit(RpcResult.Loading)
-    
+
     val client = RpcClientKt(url, config)
     try {
         val result = client.block()

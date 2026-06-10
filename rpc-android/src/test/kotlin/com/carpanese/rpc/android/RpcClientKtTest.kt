@@ -11,7 +11,7 @@ import org.junit.Assert.*
  * Unit tests for Android RPC client
  */
 class RpcClientKtTest {
-    
+
     @Test
     fun testClientCreation() {
         val client = RpcClientKt("http://localhost:3000/rpc")
@@ -19,7 +19,7 @@ class RpcClientKtTest {
         assertFalse(client.safeMode)
         client.close()
     }
-    
+
     @Test
     fun testSafeModeEnabled() {
         val config = com.carpanese.rpc.client.RpcClientConfig().setSafeMode(true)
@@ -27,7 +27,7 @@ class RpcClientKtTest {
         assertTrue(client.safeMode)
         client.close()
     }
-    
+
     @Test
     fun testAuthToken() {
         val client = RpcClientKt("http://localhost:3000/rpc")

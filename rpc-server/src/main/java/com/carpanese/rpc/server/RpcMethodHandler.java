@@ -8,10 +8,10 @@ import com.carpanese.rpc.core.RpcException;
  */
 @FunctionalInterface
 public interface RpcMethodHandler {
-    
+
     /**
      * Handle an RPC method call
-     * 
+     *
      * @param params Method parameters as JsonElement (can be null)
      * @param context Server context object (can be null)
      * @return Result as JsonElement

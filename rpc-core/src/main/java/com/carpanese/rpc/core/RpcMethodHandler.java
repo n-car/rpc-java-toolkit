@@ -7,10 +7,10 @@ import com.google.gson.JsonElement;
  */
 @FunctionalInterface
 public interface RpcMethodHandler {
-    
+
     /**
      * Handle an RPC method call
-     * 
+     *
      * @param params Method parameters as JsonElement
      * @param context Additional context (can be null)
      * @return Result as JsonElement
