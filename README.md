@@ -325,6 +325,8 @@ Works seamlessly with:
 
 ## 📱 Android Examples
 
+For a runnable Android project, see [`examples/android-client`](examples/android-client). It includes a minimal app plus instrumented checks for Safe Mode HTTP calls, batch requests, notifications, and `error.data`.
+
 ### Example 1: Simple API Call
 
 ```kotlin

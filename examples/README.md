@@ -37,7 +37,15 @@ java -cp ".:rpc-core.jar:rpc-client.jar:gson.jar:okhttp.jar" CrossPlatformExampl
 
 ## Android Examples
 
-See `rpc-android` module for Android-specific examples with:
+See [`android-client`](android-client) for a runnable Android app and instrumented checks covering:
+- Safe Mode HTTP calls
+- marker-like strings (`S:`, `D:`, BigInt marker strings)
+- batch requests
+- notifications
+- `error.data`
+- `safe=false` client behavior
+
+The `rpc-android` module also exposes Android-specific APIs with:
 - Kotlin Coroutines
 - LiveData
 - Flow API
@@ -48,7 +56,10 @@ See `rpc-android` module for Android-specific examples with:
 ### With Gradle
 ```bash
 cd rpc-java-toolkit
-./gradlew :examples:build
+./gradlew build
+
+# Android example app
+./gradlew -p examples/android-client :app:assembleDebug
 ```
 
 ### Manual Compilation

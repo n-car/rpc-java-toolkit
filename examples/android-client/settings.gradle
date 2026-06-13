@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'rpc-java-toolkit-android-client-example'
+
+include ':app'
+
+include ':rpc-core'
+project(':rpc-core').projectDir = file('../../rpc-core')
+
+include ':rpc-client'
+project(':rpc-client').projectDir = file('../../rpc-client')
+
+include ':rpc-android'
+project(':rpc-android').projectDir = file('../../rpc-android')
