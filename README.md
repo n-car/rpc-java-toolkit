@@ -1,13 +1,22 @@
 # rpc-java-toolkit
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Java](https://img.shields.io/badge/Java-11+-orange.svg)](https://openjdk.org/)
+[![Status](https://img.shields.io/badge/status-beta-yellow.svg)](https://github.com/n-car/rpc-java-toolkit)
+[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/)
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.9+-purple.svg)](https://kotlinlang.org/)
 [![Android](https://img.shields.io/badge/Android-API%2021+-green.svg)](https://developer.android.com/)
 
-Complete JSON-RPC 2.0 toolkit for Java and Android. Multi-module architecture supporting backend servers, desktop clients, and mobile Android apps.
+Beta JSON-RPC 2.0 toolkit for Java and Android. Multi-module architecture supporting backend servers, desktop clients, and mobile Android apps.
 
-## 📦 Modules
+## Project Status
+
+- Source-first beta package.
+- Java 21 is required by the current Gradle build.
+- Maven Central publication is not complete yet; use the repository source or local Maven publishing for now.
+- Standard JSON-RPC 2.0 remains the default behavior.
+- Optional RPC Toolkit Safe Mode interoperability is implemented in the core serializer/client paths.
+
+## Modules
 
 ### rpc-core
 Core types and serialization for JSON-RPC 2.0.
@@ -29,7 +38,7 @@ Core types and serialization for JSON-RPC 2.0.
 implementation 'com.carpanese.rpc:rpc-core:1.0.0'
 ```
 
-### rpc-server ⭐ NEW
+### rpc-server
 Server-side JSON-RPC 2.0 endpoint for Java applications.
 - Method registration with handlers
 - Introspection methods (`__rpc.*`)
@@ -87,7 +96,7 @@ Android-specific extensions with Kotlin Coroutines, LiveData, Flow, and Retrofit
 implementation 'com.carpanese.rpc:rpc-android:1.0.0'
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Java Backend / Desktop
 
@@ -224,26 +233,26 @@ lifecycleScope.launch {
 }
 ```
 
-## 🎨 Features
+## Features
 
 ### Core Features
-- ✅ **JSON-RPC 2.0 Compliance** - Full specification support
-- ✅ **Safe Mode** - Type-safe serialization (S:, D:, n)
-- ✅ **Multi-Module** - Use only what you need
-- ✅ **Cross-Platform** - Works with entire RPC Toolkit ecosystem
-- ✅ **Thread-Safe** - Concurrent requests supported
-- ✅ **Timeout Control** - Configurable timeouts
-- ✅ **Authentication** - Bearer token support
+- **JSON-RPC 2.0 Compliance** - Full specification support
+- **Safe Mode** - Type-safe serialization (S:, D:, n)
+- **Multi-Module** - Use only what you need
+- **Cross-Platform** - Works with entire RPC Toolkit ecosystem
+- **Thread-Safe** - Concurrent requests supported
+- **Timeout Control** - Configurable timeouts
+- **Authentication** - Bearer token support
 
 ### Android Features
-- ✅ **Kotlin Coroutines** - Suspend functions
-- ✅ **LiveData** - Reactive UI updates
-- ✅ **Flow** - Modern reactive streams
-- ✅ **ViewModel** - Architecture components
-- ✅ **Retrofit** - Advanced HTTP features
-- ✅ **Type-Safe** - Generic result types
+- **Kotlin Coroutines** - Suspend functions
+- **LiveData** - Reactive UI updates
+- **Flow** - Modern reactive streams
+- **ViewModel** - Architecture components
+- **Retrofit** - Advanced HTTP features
+- **Type-Safe** - Generic result types
 
-## 📖 Documentation
+## Documentation
 
 ### Java Client Configuration
 
@@ -314,16 +323,16 @@ rpcResultFlowAs<List<Item>>(url) {
 }
 ```
 
-## 🔗 Cross-Platform Compatibility
+## Cross-Platform Compatibility
 
 Works seamlessly with:
-- ✅ **[rpc-express-toolkit](https://github.com/n-car/rpc-express-toolkit)** - Node.js/Express
-- ✅ **[rpc-php-toolkit](https://github.com/n-car/rpc-php-toolkit)** - PHP
-- ✅ **[rpc-dotnet-toolkit](https://github.com/n-car/rpc-dotnet-toolkit)** - .NET
-- ✅ **[rpc-arduino-toolkit](https://github.com/n-car/rpc-arduino-toolkit)** - Arduino/ESP32
-- ✅ **[node-red-contrib-rpc-toolkit](https://github.com/n-car/node-red-contrib-rpc-toolkit)** - Node-RED
+- **[rpc-express-toolkit](https://github.com/n-car/rpc-express-toolkit)** - Node.js/Express
+- **[rpc-php-toolkit](https://github.com/n-car/rpc-php-toolkit)** - PHP
+- **[rpc-dotnet-toolkit](https://github.com/n-car/rpc-dotnet-toolkit)** - .NET
+- **[rpc-arduino-toolkit](https://github.com/n-car/rpc-arduino-toolkit)** - Arduino/ESP32
+- **[node-red-contrib-rpc-toolkit](https://github.com/n-car/node-red-contrib-rpc-toolkit)** - Node-RED
 
-## 📱 Android Examples
+## Android Examples
 
 For a runnable Android project, see [`examples/android-client`](examples/android-client). It includes a minimal app plus instrumented checks for Safe Mode HTTP calls, batch requests, notifications, and `error.data`.
 
@@ -437,7 +446,7 @@ class DashboardFragment : Fragment() {
 ./gradlew publishToMavenLocal
 ```
 
-## 🔗 Related Projects
+## Related Projects
 
 - [rpc-express-toolkit](https://github.com/n-car/rpc-express-toolkit) - Node.js/Express implementation
 - [rpc-php-toolkit](https://github.com/n-car/rpc-php-toolkit) - PHP implementation
