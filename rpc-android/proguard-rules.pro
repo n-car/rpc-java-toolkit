@@ -11,8 +11,8 @@
 -keep class * implements com.google.gson.JsonDeserializer
 
 # RPC Core
--keep class com.carpanese.rpc.core.** { *; }
--keepclassmembers class com.carpanese.rpc.core.** { *; }
+-keep class it.carpanese.rpc.core.** { *; }
+-keepclassmembers class it.carpanese.rpc.core.** { *; }
 
 # OkHttp
 -dontwarn okhttp3.**

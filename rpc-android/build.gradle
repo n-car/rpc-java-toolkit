@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.carpanese.rpc.android'
+    namespace 'it.carpanese.rpc.android'
     compileSdk 34
 
     defaultConfig {

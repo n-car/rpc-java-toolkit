@@ -28,7 +28,7 @@ dependencies {
 
 ```xml
 <dependency>
-    <groupId>com.carpanese.rpc</groupId>
+    <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-server</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -37,7 +37,7 @@ dependencies {
 ## Quick Start
 
 ```java
-import com.carpanese.rpc.server.*;
+import it.carpanese.rpc.server.*;
 import com.google.gson.JsonPrimitive;
 
 // Create endpoint

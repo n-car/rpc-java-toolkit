@@ -27,7 +27,7 @@ Core types and serialization for JSON-RPC 2.0.
 **Maven:**
 ```xml
 <dependency>
-    <groupId>com.carpanese.rpc</groupId>
+    <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-core</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -35,7 +35,7 @@ Core types and serialization for JSON-RPC 2.0.
 
 **Gradle:**
 ```gradle
-implementation 'com.carpanese.rpc:rpc-core:1.0.0'
+implementation 'it.carpanese.rpc:rpc-core:1.0.0'
 ```
 
 ### rpc-server
@@ -52,7 +52,7 @@ Server-side JSON-RPC 2.0 endpoint for Java applications.
 **Maven:**
 ```xml
 <dependency>
-    <groupId>com.carpanese.rpc</groupId>
+    <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-server</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -60,7 +60,7 @@ Server-side JSON-RPC 2.0 endpoint for Java applications.
 
 **Gradle:**
 ```gradle
-implementation 'com.carpanese.rpc:rpc-server:1.0.0'
+implementation 'it.carpanese.rpc:rpc-server:1.0.0'
 ```
 
 ### rpc-client
@@ -73,7 +73,7 @@ HTTP client for making RPC calls (OkHttp-based).
 **Maven:**
 ```xml
 <dependency>
-    <groupId>com.carpanese.rpc</groupId>
+    <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-client</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -81,7 +81,7 @@ HTTP client for making RPC calls (OkHttp-based).
 
 **Gradle:**
 ```gradle
-implementation 'com.carpanese.rpc:rpc-client:1.0.0'
+implementation 'it.carpanese.rpc:rpc-client:1.0.0'
 ```
 
 ### rpc-android
@@ -93,7 +93,7 @@ Android-specific extensions with Kotlin Coroutines, LiveData, Flow, and Retrofit
 
 **Gradle:**
 ```gradle
-implementation 'com.carpanese.rpc:rpc-android:1.0.0'
+implementation 'it.carpanese.rpc:rpc-android:1.0.0'
 ```
 
 ## Quick Start
@@ -101,7 +101,7 @@ implementation 'com.carpanese.rpc:rpc-android:1.0.0'
 ### Java Backend / Desktop
 
 ```java
-import com.carpanese.rpc.client.RpcClient;
+import it.carpanese.rpc.client.RpcClient;
 import com.google.gson.JsonObject;
 
 public class Example {
@@ -128,7 +128,7 @@ public class Example {
 ### Android - Kotlin Coroutines
 
 ```kotlin
-import com.carpanese.rpc.android.RpcClientKt
+import it.carpanese.rpc.android.RpcClientKt
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
 ### Android - ViewModel + LiveData
 
 ```kotlin
-import com.carpanese.rpc.android.RpcViewModel
+import it.carpanese.rpc.android.RpcViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
@@ -195,7 +195,7 @@ viewModel.data.observe(viewLifecycleOwner) { user ->
 ### Android - Flow API
 
 ```kotlin
-import com.carpanese.rpc.android.*
+import it.carpanese.rpc.android.*
 import kotlinx.coroutines.flow.*
 
 lifecycleScope.launch {
@@ -214,8 +214,8 @@ lifecycleScope.launch {
 ### Android - Retrofit Integration
 
 ```kotlin
-import com.carpanese.rpc.android.RpcService
-import com.carpanese.rpc.android.RetrofitRpcClient
+import it.carpanese.rpc.android.RpcService
+import it.carpanese.rpc.android.RetrofitRpcClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -257,7 +257,7 @@ lifecycleScope.launch {
 ### Java Client Configuration
 
 ```java
-import com.carpanese.rpc.client.RpcClientConfig;
+import it.carpanese.rpc.client.RpcClientConfig;
 import java.time.Duration;
 
 RpcClientConfig config = new RpcClientConfig()

@@ -1,6 +1,6 @@
-package com.carpanese.rpc.examples;
+package it.carpanese.rpc.examples;
 
-import com.carpanese.rpc.client.RpcClient;
+import it.carpanese.rpc.client.RpcClient;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

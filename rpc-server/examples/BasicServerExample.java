@@ -1,8 +1,8 @@
-package com.carpanese.rpc.server;
+package it.carpanese.rpc.server;
 
-import com.carpanese.rpc.server.logging.RpcLogFormat;
-import com.carpanese.rpc.server.logging.RpcLogLevel;
-import com.carpanese.rpc.server.logging.RpcLoggerOptions;
+import it.carpanese.rpc.server.logging.RpcLogFormat;
+import it.carpanese.rpc.server.logging.RpcLogLevel;
+import it.carpanese.rpc.server.logging.RpcLoggerOptions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -58,8 +58,8 @@ public class BasicServerExample {
 
             String user = c.database.get("user_" + id);
             if (user == null) {
-                throw new com.carpanese.rpc.core.RpcException(
-                    com.carpanese.rpc.core.RpcError.INVALID_PARAMS,
+                throw new it.carpanese.rpc.core.RpcException(
+                    it.carpanese.rpc.core.RpcError.INVALID_PARAMS,
                     "User " + id + " not found"
                 );
             }

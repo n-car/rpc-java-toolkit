@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.carpanese.rpc.examples.android'
+    namespace 'it.carpanese.rpc.examples.android'
     compileSdk 34
 
     defaultConfig {
-        applicationId 'com.carpanese.rpc.examples.android'
+        applicationId 'it.carpanese.rpc.examples.android'
         minSdk 23
         targetSdk 34
         versionCode 1

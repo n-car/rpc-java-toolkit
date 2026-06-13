@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '2.1.0' apply false
 }
 
-group = 'com.carpanese.rpc'
+group = 'it.carpanese.rpc'
 version = '1.0.0'
 
 subprojects {
@@ -55,7 +55,7 @@ subprojects {
                             developer {
                                 id = 'n-car'
                                 name = 'Nicola Carpanese'
-                                email = 'nicola@carpanese.com'
+                                url = 'https://github.com/n-car'
                             }
                         }
 

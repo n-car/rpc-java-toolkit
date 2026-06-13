@@ -1,7 +1,7 @@
 package examples;
 
-import com.carpanese.rpc.server.RpcSafeEndpoint;
-import com.carpanese.rpc.client.RpcSafeClient;
+import it.carpanese.rpc.server.RpcSafeEndpoint;
+import it.carpanese.rpc.client.RpcSafeClient;
 import com.google.gson.*;
 
 import java.time.Instant;
