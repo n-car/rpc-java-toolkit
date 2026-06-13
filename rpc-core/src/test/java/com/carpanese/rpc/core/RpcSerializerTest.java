@@ -93,6 +93,17 @@ class RpcSerializerTest {
     }
 
     @Test
+    void testStandardModeOmitsNullParams() {
+        RpcSerializer serializer = new RpcSerializer(false);
+
+        RpcRequest request = new RpcRequest("ping", null, 1);
+        String json = serializer.toJson(request);
+
+        assertFalse(json.contains("\"params\""));
+        assertTrue(json.contains("\"id\":1"));
+    }
+
+    @Test
     void testSafeModeEncodesAndDecodesResponseErrorData() {
         RpcSerializer serializer = new RpcSerializer(true);
 

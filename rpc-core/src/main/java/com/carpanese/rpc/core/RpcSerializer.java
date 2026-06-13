@@ -53,10 +53,11 @@ public class RpcSerializer {
      * Serialize object to JSON string
      */
     public String toJson(Object obj) {
+        if (obj instanceof RpcRequest request) {
+            return gson.toJson(toSafeRequestJson(request));
+        }
+
         if (safeMode) {
-            if (obj instanceof RpcRequest request) {
-                return gson.toJson(toSafeRequestJson(request));
-            }
             if (obj instanceof RpcResponse response) {
                 return gson.toJson(toSafeResponseJson(response));
             }

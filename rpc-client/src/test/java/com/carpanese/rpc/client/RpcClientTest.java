@@ -55,7 +55,9 @@ class RpcClientTest {
         RecordedRequest request = server.takeRequest();
         assertEquals("/rpc", request.getPath());
         assertEquals("POST", request.getMethod());
-        assertTrue(request.getBody().readUtf8().contains("\"method\":\"ping\""));
+        String body = request.getBody().readUtf8();
+        assertTrue(body.contains("\"method\":\"ping\""));
+        assertFalse(body.contains("\"params\""));
     }
 
     @Test
@@ -89,7 +91,7 @@ class RpcClientTest {
         RecordedRequest request = server.takeRequest();
         String body = request.getBody().readUtf8();
         assertTrue(body.contains("\"method\":\"logEvent\""));
-        assertTrue(body.contains("\"id\":null"), "Notifications should have id:null");
+        assertFalse(body.contains("\"id\""), "Notifications must omit id");
     }
 
     @Test
