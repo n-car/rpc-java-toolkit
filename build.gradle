@@ -1,10 +1,58 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+
 plugins {
     id 'com.android.library' version '8.7.3' apply false
     id 'org.jetbrains.kotlin.android' version '2.1.0' apply false
+    id 'com.vanniktech.maven.publish' version '0.34.0' apply false
 }
 
 group = 'it.carpanese.rpc'
-version = '1.0.0'
+version = '0.1.0'
+
+def configureMavenPublishing = { Project target, Object publicationConfig ->
+    target.plugins.apply('com.vanniktech.maven.publish')
+
+    target.mavenPublishing {
+        configure(publicationConfig)
+        publishToMavenCentral()
+        if (target.providers.gradleProperty('signingInMemoryKey').isPresent()
+            || target.providers.gradleProperty('signing.secretKeyRingFile').isPresent()) {
+            signAllPublications()
+        }
+        coordinates(rootProject.group.toString(), target.name, rootProject.version.toString())
+
+        pom {
+            name = target.name
+            description = "JSON-RPC 2.0 toolkit for Java and Android - ${target.name}"
+            inceptionYear = '2026'
+            url = 'https://github.com/n-car/rpc-java-toolkit'
+
+            licenses {
+                license {
+                    name = 'MIT License'
+                    url = 'https://opensource.org/licenses/MIT'
+                    distribution = 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id = 'n-car'
+                    name = 'Nicola Carpanese'
+                    url = 'https://github.com/n-car'
+                }
+            }
+
+            scm {
+                url = 'https://github.com/n-car/rpc-java-toolkit'
+                connection = 'scm:git:git://github.com/n-car/rpc-java-toolkit.git'
+                developerConnection = 'scm:git:ssh://git@github.com/n-car/rpc-java-toolkit.git'
+            }
+        }
+    }
+}
 
 subprojects {
     group = rootProject.group
@@ -18,7 +66,6 @@ subprojects {
     // Java modules only
     if (project.name != 'rpc-android') {
         plugins.apply('java-library')
-        plugins.apply('maven-publish')
 
         java {
             sourceCompatibility = JavaVersion.VERSION_21
@@ -33,40 +80,13 @@ subprojects {
         test {
             useJUnitPlatform()
         }
+    }
 
-        publishing {
-            publications {
-                mavenJava(MavenPublication) {
-                    from components.java
+    plugins.withId('java-library') {
+        configureMavenPublishing(project, new JavaLibrary(new JavadocJar.Empty(), true))
+    }
 
-                    pom {
-                        name = project.name
-                        description = "JSON-RPC 2.0 toolkit for Java - ${project.name}"
-                        url = 'https://github.com/n-car/rpc-java-toolkit'
-
-                        licenses {
-                            license {
-                                name = 'MIT License'
-                                url = 'https://opensource.org/licenses/MIT'
-                            }
-                        }
-
-                        developers {
-                            developer {
-                                id = 'n-car'
-                                name = 'Nicola Carpanese'
-                                url = 'https://github.com/n-car'
-                            }
-                        }
-
-                        scm {
-                            connection = 'scm:git:git://github.com/n-car/rpc-java-toolkit.git'
-                            developerConnection = 'scm:git:ssh://github.com/n-car/rpc-java-toolkit.git'
-                            url = 'https://github.com/n-car/rpc-java-toolkit'
-                        }
-                    }
-                }
-            }
-        }
+    plugins.withId('com.android.library') {
+        configureMavenPublishing(project, new AndroidSingleVariantLibrary('release', true, true))
     }
 }

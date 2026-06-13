@@ -12,7 +12,7 @@ Beta JSON-RPC 2.0 toolkit for Java and Android. Multi-module architecture suppor
 
 - Source-first beta package.
 - Java 21 is required by the current Gradle build.
-- Maven Central publication is not complete yet; use the repository source or local Maven publishing for now.
+- Maven Central publication is being prepared under the verified `it.carpanese` namespace.
 - Standard JSON-RPC 2.0 remains the default behavior.
 - Optional RPC Toolkit Safe Mode interoperability is implemented in the core serializer/client paths.
 
@@ -29,13 +29,13 @@ Core types and serialization for JSON-RPC 2.0.
 <dependency>
     <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-core</artifactId>
-    <version>1.0.0</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
 **Gradle:**
 ```gradle
-implementation 'it.carpanese.rpc:rpc-core:1.0.0'
+implementation 'it.carpanese.rpc:rpc-core:0.1.0'
 ```
 
 ### rpc-server
@@ -54,13 +54,13 @@ Server-side JSON-RPC 2.0 endpoint for Java applications.
 <dependency>
     <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-server</artifactId>
-    <version>1.0.0</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
 **Gradle:**
 ```gradle
-implementation 'it.carpanese.rpc:rpc-server:1.0.0'
+implementation 'it.carpanese.rpc:rpc-server:0.1.0'
 ```
 
 ### rpc-client
@@ -75,13 +75,13 @@ HTTP client for making RPC calls (OkHttp-based).
 <dependency>
     <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-client</artifactId>
-    <version>1.0.0</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
 **Gradle:**
 ```gradle
-implementation 'it.carpanese.rpc:rpc-client:1.0.0'
+implementation 'it.carpanese.rpc:rpc-client:0.1.0'
 ```
 
 ### rpc-android
@@ -93,7 +93,7 @@ Android-specific extensions with Kotlin Coroutines, LiveData, Flow, and Retrofit
 
 **Gradle:**
 ```gradle
-implementation 'it.carpanese.rpc:rpc-android:1.0.0'
+implementation 'it.carpanese.rpc:rpc-android:0.1.0'
 ```
 
 ## Quick Start
