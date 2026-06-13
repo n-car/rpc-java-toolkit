@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-beta-yellow.svg)](https://github.com/n-car/rpc-java-toolkit)
+[![Maven Central](https://img.shields.io/maven-central/v/it.carpanese.rpc/rpc-core?label=Maven%20Central)](https://central.sonatype.com/namespace/it.carpanese.rpc)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/)
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.9+-purple.svg)](https://kotlinlang.org/)
 [![Android](https://img.shields.io/badge/Android-API%2021+-green.svg)](https://developer.android.com/)
@@ -10,9 +11,8 @@ Beta JSON-RPC 2.0 toolkit for Java and Android. Multi-module architecture suppor
 
 ## Project Status
 
-- Source-first beta package.
+- Beta package published on Maven Central as `it.carpanese.rpc`.
 - Java 21 is required by the current Gradle build.
-- Maven Central publication is being prepared under the verified `it.carpanese` namespace.
 - Standard JSON-RPC 2.0 remains the default behavior.
 - Optional RPC Toolkit Safe Mode interoperability is implemented in the core serializer/client paths.
 
