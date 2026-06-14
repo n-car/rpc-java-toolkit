@@ -11,8 +11,9 @@ class RpcSafeClientTest {
 
     @Test
     void testSafeClientInitializesWithUrl() {
-        RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api");
-        assertNotNull(client);
+        try (RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api")) {
+            assertNotNull(client);
+        }
     }
 
     @Test
@@ -20,26 +21,30 @@ class RpcSafeClientTest {
         RpcClientConfig config = new RpcClientConfig()
             .setConnectTimeout(java.time.Duration.ofSeconds(5));
 
-        RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api", config);
-        assertNotNull(client);
+        try (RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api", config)) {
+            assertNotNull(client);
+        }
     }
 
     @Test
     void testSafeClientInheritsFromRpcClient() {
-        RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api");
-        assertTrue(client instanceof RpcClient);
+        try (RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api")) {
+            assertTrue(client instanceof RpcClient);
+        }
     }
 
     @Test
     void testSafeClientWithNullConfig() {
         // Should create with default safe config
-        RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api", null);
-        assertNotNull(client);
+        try (RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api", null)) {
+            assertNotNull(client);
+        }
     }
 
     @Test
     void testSafeClientImplementsAutoCloseable() {
-        RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api");
-        assertTrue(client instanceof AutoCloseable);
+        try (RpcSafeClient client = new RpcSafeClient("http://localhost:3000/api")) {
+            assertTrue(client instanceof AutoCloseable);
+        }
     }
 }

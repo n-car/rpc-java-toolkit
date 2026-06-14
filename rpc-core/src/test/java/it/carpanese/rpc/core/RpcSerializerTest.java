@@ -119,7 +119,9 @@ class RpcSerializerTest {
         assertTrue(json.contains("\"plain\":\"S:hello\""));
 
         RpcResponse decoded = serializer.fromJson(json, RpcResponse.class);
+        assertNotNull(decoded.getError());
         assertEquals("Domain failure", decoded.getError().getMessage());
+        assertNotNull(decoded.getError().getData());
         JsonObject decodedData = decoded.getError().getData().getAsJsonObject();
         assertEquals("S:error-data-literal", decodedData.get("markerString").getAsString());
         assertEquals("hello", decodedData.get("plain").getAsString());
@@ -154,6 +156,7 @@ class RpcSerializerTest {
 
         assertTrue(response.isError());
         assertFalse(response.isSuccess());
+        assertNotNull(response.getError());
         assertEquals(RpcError.METHOD_NOT_FOUND, response.getError().getCode());
     }
 

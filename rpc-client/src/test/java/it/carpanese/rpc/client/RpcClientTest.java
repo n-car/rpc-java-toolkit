@@ -145,6 +145,8 @@ class RpcClientTest {
             String body = request.getBody().readUtf8();
 
             assertEquals(2, responses.size());
+            assertNotNull(responses.get(0).getResult());
+            assertNotNull(responses.get(1).getError());
             assertEquals("pong", responses.get(0).getResult().getAsString());
             assertEquals(-32601, responses.get(1).getError().getCode());
             assertEquals("Method not found", responses.get(1).getError().getMessage());
