@@ -135,6 +135,28 @@ public class Example {
 }
 ```
 
+### Java Safe Mode Server
+
+Use `RpcSafeEndpoint` when the Java endpoint is talking to RPC Toolkit Safe Mode clients:
+
+```java
+import com.google.gson.JsonPrimitive;
+import it.carpanese.rpc.server.RpcSafeEndpoint;
+
+RpcSafeEndpoint endpoint = new RpcSafeEndpoint();
+
+endpoint.addMethod("ping", (params, ctx) -> new JsonPrimitive("pong"));
+
+String response = endpoint.handleRequest(
+    "{\"jsonrpc\":\"2.0\",\"method\":\"ping\",\"id\":1}"
+);
+
+// Safe Mode encodes string results with the S: marker.
+// {"jsonrpc":"2.0","id":1,"result":"S:pong"}
+```
+
+`RpcSafeEndpoint` is a convenience subclass of `RpcEndpoint` with Safe Mode enabled. Use plain `RpcEndpoint` for standard JSON-RPC 2.0 endpoints.
+
 ### Android - Kotlin Coroutines
 
 ```kotlin
