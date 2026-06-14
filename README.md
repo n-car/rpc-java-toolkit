@@ -16,6 +16,15 @@ Beta JSON-RPC 2.0 toolkit for Java and Android. Multi-module architecture suppor
 - Standard JSON-RPC 2.0 remains the default behavior.
 - Optional RPC Toolkit Safe Mode interoperability is implemented in the core serializer/client paths.
 
+## Which Module Should I Use?
+
+| Need | Module |
+| --- | --- |
+| Core JSON-RPC request, response, error, and serialization types | `rpc-core` |
+| Java HTTP client for calling JSON-RPC endpoints | `rpc-client` |
+| Java endpoint for handling JSON-RPC payloads | `rpc-server` |
+| Android Kotlin, LiveData, Flow, ViewModel, or Retrofit helpers | `rpc-android` |
+
 ## Modules
 
 ### rpc-core
@@ -155,83 +164,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Android - ViewModel + LiveData
-
-```kotlin
-import it.carpanese.rpc.android.RpcViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
-
-class MyViewModel : RpcViewModel("http://api.example.com/rpc") {
-
-    private val _data = MutableLiveData<User>()
-    val data: LiveData<User> = _data
-
-    fun loadUser(userId: Int) {
-        val params = JsonObject().apply {
-            addProperty("userId", userId)
-        }
-
-        callRpcAs<User>("getUser", params) { user ->
-            _data.value = user
-        }
-    }
-}
-
-// In Activity/Fragment
-viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-    progressBar.isVisible = isLoading
-}
-
-viewModel.error.observe(viewLifecycleOwner) { error ->
-    error?.let { showError(it.message) }
-}
-
-viewModel.data.observe(viewLifecycleOwner) { user ->
-    updateUI(user)
-}
-```
-
-### Android - Flow API
-
-```kotlin
-import it.carpanese.rpc.android.*
-import kotlinx.coroutines.flow.*
-
-lifecycleScope.launch {
-    rpcResultFlowAs<List<User>>("http://api.example.com/rpc") {
-        call("getUsers")
-    }.collect { result ->
-        when (result) {
-            is RpcResult.Loading -> showProgress()
-            is RpcResult.Success -> updateUI(result.data)
-            is RpcResult.Error -> showError(result.exception.message)
-        }
-    }
-}
-```
-
-### Android - Retrofit Integration
-
-```kotlin
-import it.carpanese.rpc.android.RpcService
-import it.carpanese.rpc.android.RetrofitRpcClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
-val retrofit = Retrofit.Builder()
-    .baseUrl("http://api.example.com/")
-    .addConverterFactory(GsonConverterFactory.create())
-    .build()
-
-val rpcService = retrofit.create(RpcService::class.java)
-val client = RetrofitRpcClient(rpcService, "rpc")
-
-lifecycleScope.launch {
-    val result = client.call("myMethod", params)
-    // Handle result
-}
-```
+For ViewModel, Flow, Retrofit, and Android instrumentation details, see [Android Usage](docs/ANDROID.md) and the runnable [`examples/android-client`](examples/android-client) project.
 
 ## Features
 
@@ -332,119 +265,11 @@ Works seamlessly with:
 - **[rpc-arduino-toolkit](https://github.com/n-car/rpc-arduino-toolkit)** - Arduino/ESP32
 - **[node-red-contrib-rpc-toolkit](https://github.com/n-car/node-red-contrib-rpc-toolkit)** - Node-RED
 
-## Android Examples
+## More Documentation
 
-For a runnable Android project, see [`examples/android-client`](examples/android-client). It includes a minimal app plus instrumented checks for Safe Mode HTTP calls, batch requests, notifications, and `error.data`.
-
-### Example 1: Simple API Call
-
-```kotlin
-class WeatherActivity : AppCompatActivity() {
-    private val client = RpcClientKt("http://api.weather.com/rpc")
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            val params = JsonObject().apply {
-                addProperty("city", "Rome")
-            }
-
-            try {
-                val weather = client.callAs<Weather>("getWeather", params)
-                temperatureText.text = "${weather.temp}°C"
-            } catch (e: RpcException) {
-                Toast.makeText(this@WeatherActivity, e.message, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-}
-```
-
-### Example 2: IoT Device Control
-
-```kotlin
-class DeviceControlViewModel : RpcViewModel("http://192.168.1.100:8080") {
-
-    fun toggleLed(ledId: Int, state: Boolean) {
-        val params = JsonObject().apply {
-            addProperty("ledId", ledId)
-            addProperty("state", state)
-        }
-
-        callRpc("setLed", params) { result ->
-            // LED toggled successfully
-        }
-    }
-
-    fun readSensors() {
-        callRpcAs<SensorData>("readSensors") { data ->
-            // Update UI with sensor data
-        }
-    }
-}
-```
-
-### Example 3: Real-time Updates with Flow
-
-```kotlin
-class DashboardFragment : Fragment() {
-
-    private val client = RpcClientKt("http://api.example.com/rpc")
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Poll sensor data every 5 seconds
-        viewLifecycleOwner.lifecycleScope.launch {
-            while (isActive) {
-                rpcResultFlowAs<SensorData>(client.url) {
-                    call("getSensors")
-                }.collect { result ->
-                    when (result) {
-                        is RpcResult.Success -> updateSensors(result.data)
-                        is RpcResult.Error -> showError(result.exception.message)
-                    }
-                }
-                delay(5000)
-            }
-        }
-    }
-}
-```
-
-## 🛠️ Building
-
-### Requirements
-- JDK 11 or higher
-- Gradle 8.0+
-- Android SDK 34 (for Android module)
-
-### Build All Modules
-
-```bash
-./gradlew build
-```
-
-### Build Specific Module
-
-```bash
-./gradlew :rpc-core:build
-./gradlew :rpc-client:build
-./gradlew :rpc-android:build
-```
-
-### Run Tests
-
-```bash
-./gradlew test
-```
-
-### Publish to Maven Local
-
-```bash
-./gradlew publishToMavenLocal
-```
+- [Android Usage](docs/ANDROID.md)
+- [Building](docs/BUILDING.md)
+- [Java and Android examples](examples/README.md)
 
 ## Related Projects
 
@@ -454,15 +279,15 @@ class DashboardFragment : Fragment() {
 - [rpc-arduino-toolkit](https://github.com/n-car/rpc-arduino-toolkit) - Arduino/ESP32 implementation
 - [node-red-contrib-rpc-toolkit](https://github.com/n-car/node-red-contrib-rpc-toolkit) - Node-RED visual programming
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT. See [LICENSE](LICENSE).
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Part of the RPC Toolkit ecosystem
 - OkHttp for HTTP client
