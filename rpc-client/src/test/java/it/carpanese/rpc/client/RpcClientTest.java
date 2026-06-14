@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -145,11 +146,11 @@ class RpcClientTest {
             String body = request.getBody().readUtf8();
 
             assertEquals(2, responses.size());
-            assertNotNull(responses.get(0).getResult());
-            assertNotNull(responses.get(1).getError());
-            assertEquals("pong", responses.get(0).getResult().getAsString());
-            assertEquals(-32601, responses.get(1).getError().getCode());
-            assertEquals("Method not found", responses.get(1).getError().getMessage());
+            var firstResult = Objects.requireNonNull(responses.get(0).getResult());
+            var secondError = Objects.requireNonNull(responses.get(1).getError());
+            assertEquals("pong", firstResult.getAsString());
+            assertEquals(-32601, secondError.getCode());
+            assertEquals("Method not found", secondError.getMessage());
             assertEquals("true", request.getHeader("X-RPC-Safe-Enabled"));
             assertTrue(body.startsWith("["));
             assertTrue(body.contains("\"method\":\"ping\""));
