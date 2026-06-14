@@ -1,5 +1,6 @@
 # rpc-java-toolkit
 
+[![CI](https://github.com/n-car/rpc-java-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/n-car/rpc-java-toolkit/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-beta-yellow.svg)](https://github.com/n-car/rpc-java-toolkit)
 [![Maven Central](https://img.shields.io/maven-central/v/it.carpanese.rpc/rpc-core?label=Maven%20Central)](https://central.sonatype.com/namespace/it.carpanese.rpc)

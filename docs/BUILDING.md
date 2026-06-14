@@ -6,6 +6,8 @@
 - Gradle wrapper from this repository
 - Android SDK 34 for the Android module
 
+Set `JAVA_HOME` to a JDK 21 installation before running Gradle locally.
+
 ## Build All Modules
 
 ```bash
@@ -38,4 +40,3 @@
 ```bash
 ./gradlew publishToMavenLocal
 ```
-
