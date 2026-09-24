@@ -185,6 +185,18 @@ public class RpcEndpoint {
      * @return JSON-RPC response as string
      */
     public String handleRequest(String jsonRequest) {
+        return handleRequest(jsonRequest, context);
+    }
+
+    /**
+     * Handle a JSON-RPC request with context scoped to this request.
+     *
+     * @param jsonRequest JSON-RPC request as string
+     * @param requestContext Context passed to middleware and method handlers
+     * @return JSON-RPC response as string
+     */
+    public String handleRequest(String jsonRequest, Object requestContext) {
+        Object effectiveContext = requestContext != null ? requestContext : context;
         try {
             // Detect batch vs single request
             JsonElement element = JsonParser.parseString(jsonRequest);
@@ -211,10 +223,10 @@ public class RpcEndpoint {
                     return serializeResponse(error);
                 }
 
-                return handleBatchRequest(requests);
+                return handleBatchRequest(requests, effectiveContext);
             } else {
                 RpcRequest request = parseRequest(element);
-                RpcResponse response = handleSingleRequest(request);
+                RpcResponse response = handleSingleRequest(request, effectiveContext);
 
                 // Notifications return no response
                 if (request.getId() == null) {
@@ -243,14 +255,14 @@ public class RpcEndpoint {
     /**
      * Handle a single RPC request
      */
-    private RpcResponse handleSingleRequest(RpcRequest request) {
+    private RpcResponse handleSingleRequest(RpcRequest request, Object requestContext) {
         try {
             // Validate request
             validateRequest(request);
 
             // Execute middleware before
             if (middleware != null) {
-                middleware.executeBefore(request, context);
+                middleware.executeBefore(request, requestContext);
             }
 
             // Find method
@@ -261,11 +273,11 @@ public class RpcEndpoint {
             }
 
             // Execute method
-            JsonElement result = methodConfig.getHandler().handle(request.getParams(), context);
+            JsonElement result = methodConfig.getHandler().handle(request.getParams(), requestContext);
 
             // Execute middleware after
             if (middleware != null) {
-                middleware.executeAfter(request, result, context);
+                middleware.executeAfter(request, result, requestContext);
             }
 
             if (logger != null) {
@@ -294,7 +306,7 @@ public class RpcEndpoint {
     /**
      * Handle batch request
      */
-    private String handleBatchRequest(JsonArray requests) {
+    private String handleBatchRequest(JsonArray requests, Object requestContext) {
         JsonArray responses = new JsonArray();
 
         if (logger != null) {
@@ -304,7 +316,7 @@ public class RpcEndpoint {
         for (JsonElement element : requests) {
             try {
                 RpcRequest request = parseRequest(element);
-                RpcResponse response = handleSingleRequest(request);
+                RpcResponse response = handleSingleRequest(request, requestContext);
 
                 // Don't include notification responses
                 if (request.getId() != null) {
@@ -438,7 +450,7 @@ public class RpcEndpoint {
         addMethod(introspectionPrefix + ".version", (params, ctx) -> {
             JsonObject result = new JsonObject();
             result.addProperty("toolkit", "rpc-java-toolkit");
-            result.addProperty("version", "1.0.0");
+            result.addProperty("version", "0.2.0");
             result.addProperty("javaVersion", System.getProperty("java.version"));
             return result;
         }, new MethodConfig()

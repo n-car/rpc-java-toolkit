@@ -97,6 +97,32 @@ class RpcEndpointTest {
     }
 
     @Test
+    void testHandleRequestPassesPerRequestContextToHandler() {
+        RpcEndpoint contextEndpoint = new RpcEndpoint("application", new RpcOptions()
+            .setEnableLogging(false));
+        contextEndpoint.addMethod("context", (params, ctx) -> new JsonPrimitive((String) ctx));
+
+        String response = contextEndpoint.handleRequest(
+            "{\"jsonrpc\":\"2.0\",\"method\":\"context\",\"id\":1}",
+            "request");
+
+        assertTrue(response.contains("\"result\":\"request\""));
+    }
+
+    @Test
+    void testHandleBatchPassesPerRequestContextToHandler() {
+        RpcEndpoint contextEndpoint = new RpcEndpoint("application", new RpcOptions()
+            .setEnableLogging(false));
+        contextEndpoint.addMethod("context", (params, ctx) -> new JsonPrimitive((String) ctx));
+
+        String response = contextEndpoint.handleRequest(
+            "[{\"jsonrpc\":\"2.0\",\"method\":\"context\",\"id\":1}]",
+            "batch-request");
+
+        assertTrue(response.contains("\"result\":\"batch-request\""));
+    }
+
+    @Test
     void testHandleNotification() {
         String request = "{\"jsonrpc\":\"2.0\",\"method\":\"echo\",\"params\":{\"test\":true}}";
         String response = endpoint.handleRequest(request);

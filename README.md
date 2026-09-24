@@ -39,13 +39,13 @@ Core types and serialization for JSON-RPC 2.0.
 <dependency>
     <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-core</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
 **Gradle:**
 ```gradle
-implementation 'it.carpanese.rpc:rpc-core:0.1.0'
+implementation 'it.carpanese.rpc:rpc-core:0.2.0'
 ```
 
 ### rpc-server
@@ -64,13 +64,13 @@ Server-side JSON-RPC 2.0 endpoint for Java applications.
 <dependency>
     <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-server</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
 **Gradle:**
 ```gradle
-implementation 'it.carpanese.rpc:rpc-server:0.1.0'
+implementation 'it.carpanese.rpc:rpc-server:0.2.0'
 ```
 
 ### rpc-client
@@ -85,13 +85,13 @@ HTTP client for making RPC calls (OkHttp-based).
 <dependency>
     <groupId>it.carpanese.rpc</groupId>
     <artifactId>rpc-client</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
 **Gradle:**
 ```gradle
-implementation 'it.carpanese.rpc:rpc-client:0.1.0'
+implementation 'it.carpanese.rpc:rpc-client:0.2.0'
 ```
 
 ### rpc-android
@@ -103,7 +103,7 @@ Android-specific extensions with Kotlin Coroutines, LiveData, Flow, and Retrofit
 
 **Gradle:**
 ```gradle
-implementation 'it.carpanese.rpc:rpc-android:0.1.0'
+implementation 'it.carpanese.rpc:rpc-android:0.2.0'
 ```
 
 ## Quick Start
@@ -156,6 +156,17 @@ String response = endpoint.handleRequest(
 ```
 
 `RpcSafeEndpoint` is a convenience subclass of `RpcEndpoint` with Safe Mode enabled. Use plain `RpcEndpoint` for standard JSON-RPC 2.0 endpoints.
+
+HTTP adapters can pass request-scoped authentication and transport data without
+mutating the endpoint's shared application context:
+
+```java
+String response = endpoint.handleRequest(jsonBody, requestContext);
+```
+
+The same request context is passed to middleware and handlers, including every
+item in a batch. Batch is configurable with `RpcOptions.setEnableBatch(false)`
+and `setMaxBatchSize(...)`; introspection is disabled by default.
 
 ### Android - Kotlin Coroutines
 
